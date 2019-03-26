@@ -165,11 +165,7 @@ app.use((req, res, next) => {
         passwordresetlink: config.ldap.passwordresetlink
     };
 
-    let menu = [{
-        title: _('Home'),
-        url: '/',
-        selected: true
-    }];
+    let menu = []
 
     res.setSelectedMenu = key => {
         menu.forEach(item => {
@@ -211,7 +207,6 @@ app.use('/links', links);
 app.use('/fields', fields);
 app.use('/forms', forms);
 app.use('/segments', segments);
-app.use('/triggers', triggers);
 app.use('/webhooks', webhooks);
 app.use('/subscription', subscription);
 app.use('/archive', archive);
