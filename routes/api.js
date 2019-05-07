@@ -452,6 +452,7 @@ router.post('/field/:list', (req, res) => {
 
         let field = {
             name: (input.NAME || '').toString().trim(),
+            key: (input.KEY || '').toString().trim(),
             description: (input.DESCRIPTION || '').toString().trim(),
             defaultValue: (input.DEFAULT || '').toString().trim() || null,
             type: (input.TYPE || '').toString().toLowerCase().trim(),
