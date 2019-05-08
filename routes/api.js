@@ -398,14 +398,13 @@ router.post('/lists/add', (req, res) => {
 });
 
 router.get('/list/:id', (req, res) => {
-    lists.get(req.params.id, (err, list) => {
+    lists.get(req.params.id, (err, list, status) => {
+        res.status(status);
         if (err) {
-            res.status(500);
             return res.json({
                 error: err.message || err,
             });
         }
-        res.status(200);
         res.json({
             data: list
         });
