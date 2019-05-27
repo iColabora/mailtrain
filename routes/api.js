@@ -364,15 +364,47 @@ router.get('/lists', (req, res) => {
     });
 });
 
+
+router.post('/lists/add', (req, res) => {
+    let input = {};
+    Object.keys(req.body).forEach(key => {
+        input[(key || '').toString().trim().toLowerCase()] = (req.body[key] || '').toString().trim();
+    });
+
+    if (!(input.name) || (input.name === ''))  {
+      res.status(500);
+      return res.json({
+          error: 'NAME argument are required',
+          data: []
+      });
+    }
+
+	lists.create(input,  (err, id) => {
+		if (err || !id) {
+		    log.error('API', err);
+		    res.status(500);
+		    return res.json({
+		        error: err.message || err,
+		        data: []
+		    });
+		}
+		res.status(200);
+		res.json({
+		    data: {
+		        id
+		    }
+		});
+	});
+});
+
 router.get('/list/:id', (req, res) => {
-    lists.get(req.params.id, (err, list) => {
+    lists.get(req.params.id, (err, list, status) => {
+        res.status(status);
         if (err) {
-            res.status(500);
             return res.json({
                 error: err.message || err,
             });
         }
-        res.status(200);
         res.json({
             data: list
         });
@@ -419,6 +451,7 @@ router.post('/field/:listId', (req, res) => {
 
         let field = {
             name: (input.NAME || '').toString().trim(),
+            key: (input.KEY || '').toString().trim(),
             description: (input.DESCRIPTION || '').toString().trim(),
             defaultValue: (input.DEFAULT || '').toString().trim() || null,
             type: (input.TYPE || '').toString().toLowerCase().trim(),
